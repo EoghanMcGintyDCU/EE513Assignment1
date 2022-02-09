@@ -11,7 +11,7 @@ int main()
 	rtc.displayTemperature();
 	
 	std::cout << "Setting time & date" <<std::endl;
-	rtc.setDate(10,37,19,15,2,22);
+	rtc.setDate(30,51,21,2,15,2,22);
 	rtc.displayTime();
 	
 	return 0;
