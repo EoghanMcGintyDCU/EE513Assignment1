@@ -28,8 +28,11 @@ int main()
 	std::cout << "Running Alarm test" << std::endl;
 	rtc.alarmTest();
 
-	std::cout << "Setting Square Wave" <<std::endl;
-	rtc.setSquareWave(Freq::freq1);
+	std::cout << "Setting Square Wave" << std::endl;
+	rtc.setSquareWave(freq4);
+
+	std::cout << "Novel functionality" << std::endl;
+	rtc.novel();
 
 	return 0;
 }

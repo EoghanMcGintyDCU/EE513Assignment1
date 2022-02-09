@@ -1,11 +1,11 @@
 #include <fstream>
 
-enum class Freq
+enum Freq
 {
-	freq1 = 0b00,
-	freq2 = 0b01,
-	freq3 = 0b10,
-	freq4 = 0b11
+	freq1 = 0b00, //1Hz
+	freq2 = 0b01, //1.024kHz
+	freq3 = 0b10, //4.096kHZ
+	freq4 = 0b11  //8.192kHz
 };
 
 class RTC
@@ -22,5 +22,6 @@ public:
 	int readAlarm2();
 	int alarmTest();
 	int setSquareWave(Freq freq);
+	int novel();
 	virtual ~RTC();
 };
