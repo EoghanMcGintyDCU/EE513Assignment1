@@ -12,18 +12,15 @@
 #define REG_TEMP_MSB 	0x11
 #define REG_TEMP_LSB 	0x12
 
-RTC::RTC()
-{}
+RTC::RTC(){}
 
-RTC::~RTC()
-{}
+RTC::~RTC(){}
 
 // the time is in the registers in encoded decimal form
 int bcdToDec(char b) { return (b/16)*10 + (b%16); }
 char decToBcd(int i) { return (i/10)*16 + (i%10); } 
 
-int readI2C(char reg_addr, char* buf, size_t size)
-{
+int readI2C(char reg_addr, char* buf, size_t size){
 	int file;
 	if((file=open("/dev/i2c-2", O_RDWR)) < 0){
 	  	return -1;
@@ -43,14 +40,13 @@ int readI2C(char reg_addr, char* buf, size_t size)
 }
 
 // First byte in buf must be address writing to
-int writeI2C(char* buf, size_t size)
-{
+int writeI2C(char* buf, size_t size){
 	int file;
-	if((file=open("/dev/i2c-2", O_WRONLY)) < 0){
+	if((file=open("/dev/i2c-2", O_RDWR)) < 0){
 		return -1;
 	}
 	if(ioctl(file, I2C_SLAVE, 0x68) < 0){
-		return -1;
+	  	return -1;
 	}
 	if(write(file, buf, size)!=size){
 		return -1;
@@ -59,8 +55,7 @@ int writeI2C(char* buf, size_t size)
 	return 0;
 }
 
-int RTC::displayTime()
-{
+int RTC::displayTime(){
 	char buf[BUFFER_SIZE];
 	if(readI2C(REG_0, buf, BUFFER_SIZE)<0){
 		std::cerr << "read failed" << std::endl;
@@ -72,8 +67,18 @@ int RTC::displayTime()
 	return 0;
 }
 
-int RTC::displayTemperature()
-{
+int RTC::displayDate(){
+	char buf[BUFFER_SIZE];
+	if(readI2C(REG_0, buf, BUFFER_SIZE)<0){
+		std::cerr<< "read failed" << std::endl;
+		return -1;
+	}
+	printf("The RTC date is %02d/%02d/%02d\n", bcdToDec(buf[4]),
+		bcdToDec(buf[5]), bcdToDec(buf[6]));
+	return 0;
+}
+
+int RTC::displayTemperature(){
 	char buf[BUFFER_SIZE];
 	if(readI2C(REG_0, buf, BUFFER_SIZE)<0){
 		std::cerr << "read failed" << std::endl;
@@ -83,8 +88,7 @@ int RTC::displayTemperature()
 	return 0;
 }
 
-int RTC::setDate(int secs, int mins, int hours, int day, int date, int month, int year)
-{
+int RTC::setDate(int secs, int mins, int hours, int day, int date, int month, int year){
 	char buf[8];
 	buf[1] = decToBcd(secs);
 	buf[2] = decToBcd(mins);
@@ -105,8 +109,13 @@ int RTC::setDate(int secs, int mins, int hours, int day, int date, int month, in
 	return 0;
 }
 
-int RTC::setAlarm()
-{
-	std::cout << "setAlarm" << std::endl;
+int RTC::setAlarm1(int secs, int mins, int hours){
+	std::cout << "setAlarm1" << std::endl;
 	return 0;
 }
+
+int RTC::setAlarm2(int secs, int mins, int hours, int day, int date){
+	std::cout << "setAlarm2" <<std::endl;
+	return 0;
+}
+
