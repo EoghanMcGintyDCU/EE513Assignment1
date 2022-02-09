@@ -17,6 +17,19 @@ int main()
 
 	std::cout << "Setting Alarm 1" << std::endl;
 	rtc.setAlarm1(00,30,22);
+	std::cout << "Reading Alarm 1" << std::endl;
+	rtc.readAlarm1();
 	
+	std::cout << "Setting Alarm 2" << std::endl;
+	rtc.setAlarm2(45,22,3);
+	std::cout << "Reading Alarm 2" << std::endl;
+	rtc.readAlarm2();	
+
+	std::cout << "Running Alarm test" << std::endl;
+	rtc.alarmTest();
+
+	std::cout << "Setting Square Wave" <<std::endl;
+	rtc.setSquareWave(Freq::freq1);
+
 	return 0;
 }
