@@ -51,7 +51,7 @@ int RTC::displayTemperature()
 {
 	char buf[BUFFER_SIZE];
 	readI2C(buf);
-	printf("The RTC temperature is %d\n", buf[17]);
+	printf("The RTC temperature is %d.%d Deg C\n", buf[0x11], buf[0x12]);
 	return 0;
 }
 
