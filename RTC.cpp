@@ -262,11 +262,27 @@ int RTC::setSquareWave(Freq freq){
 int RTC::novel(){
 	std::cout << "Changing clock to 12 hour" << std::endl;
 
-	if(writeReg(REG_HOURS, HOURS_MASK, (0b1 << 6)) < 0){
+	char buf[1];
+	if(readI2C(REG_HOURS, buf, 1)<0){
+		std::cerr << "read failed" <<std::endl;
+		return -1;	
+	}
+
+	int hours = bcdToDec(buf[0]);
+	char am_pm = 0x0;
+	if(hours > 12){
+		hours %= 12;
+		am_pm = 0b1 << 5;
+	}
+
+	if(hours == 12){
+		am_pm = 0b1 << 5;
+	}
+	
+	if(writeReg(REG_HOURS, HOURS_MASK, (0b1 << 6) | decToBcd(hours) | am_pm) < 0){
 		return -1;
 	}
 
-	char buf[1];
 	if(readI2C(REG_DAY, buf, 1) < 0){
 		std::cerr << "read failed" << std::endl;
 		return -1;
